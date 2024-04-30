@@ -21,7 +21,7 @@ func (m *KeyNotExistsError) Error() string {
 	return "Key does not exist in database"
 }
 
-func makeDB[K comparable, V any]() *AsyncDB[K, V] {
+func MakeDB[K comparable, V any]() *AsyncDB[K, V] {
 	db := &AsyncDB[K, V]{}
 	db.M = sync.Map{}
 	return db

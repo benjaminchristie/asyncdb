@@ -22,7 +22,7 @@ func genderCheck(gender string, e map[string]string) bool {
 
 func TestAsync(t *testing.T) {
 	var wg sync.WaitGroup
-	db := makeDB[string, map[string]string]()
+	db := MakeDB[string, map[string]string]()
 	for i := 0; i < 100; i++ {
 		wg.Add(1)
 		go func(i int) {
@@ -44,7 +44,7 @@ func TestAsync(t *testing.T) {
 		}
 	}
 	t.Log("Success!")
-	db = makeDB[string, map[string]string]()
+	db = MakeDB[string, map[string]string]()
 	value := make(map[string]string)
 	key := fmt.Sprintf("user%d", 0)
 	value["count"] = strconv.Itoa(0)
@@ -105,7 +105,7 @@ func TestAsync(t *testing.T) {
 		}
 	}
 
-	db = makeDB[string, map[string]string]()
+	db = MakeDB[string, map[string]string]()
 
 	AddItem(db, key, value)
 	for i := 0; i < 100; i++ {
@@ -139,7 +139,7 @@ func TestSync(t *testing.T) {
 	var strings []string
 	var m map[string]string
 	var err error
-	db := makeDB[string, map[string]string]()
+	db := MakeDB[string, map[string]string]()
 	strings = SelectFrom(db, func(e map[string]string) bool { return genderCheck("male", e) })
 	if len(strings) != 0 {
 		t.Fatalf("%s", strings[0])

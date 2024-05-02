@@ -125,7 +125,7 @@ func ExportToFile[K comparable, V any](db *AsyncDB[K, V], filename string) error
 }
 
 func ImportFromFile[K comparable, V any](filename string, dur ...time.Duration) (*AsyncDB[K, V], error) {
-	db := MakeDB[K, V](dur...)
+	db := MakeDB[K, V](filename, dur...)
 	fh, err := os.Open(filename)
 	defer fh.Close()
 	if err != nil {

@@ -45,7 +45,7 @@ func MakeTicker(dur time.Duration, cb func()) *TickerCB {
 	}
 }
 
-func MakeDB[K comparable, V any](t ...time.Duration) *AsyncDB[K, V] {
+func MakeDB[K comparable, V any](filename string, t ...time.Duration) *AsyncDB[K, V] {
 	dur := time.Duration(time.Minute * 10)
 	if len(t) != 0 {
 		dur = time.Duration(time.Minute * t[0])
@@ -53,7 +53,7 @@ func MakeDB[K comparable, V any](t ...time.Duration) *AsyncDB[K, V] {
 	db := &AsyncDB[K, V]{}
 	db.m = sync.Map{}
 	db.tickerCB = MakeTicker(dur, func() {
-		ExportToFile(db, "database.bin")
+		ExportToFile(db, filename)
 	})
 	return db
 }

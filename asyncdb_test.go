@@ -3,6 +3,7 @@ package asyncdb
 import (
 	"fmt"
 	"math/rand"
+	"net/http"
 	"strconv"
 	"sync"
 	"testing"
@@ -18,6 +19,33 @@ type TestingValue struct {
 func genderCheck(gender string, e map[string]string) bool {
 	_, exists := e[gender]
 	return exists
+}
+
+
+
+func TestImportExport(t *testing.T) {
+	db := MakeDB[string, map[string]string](time.Second * 1)
+	value := make(map[string]string)
+	key := "user1"
+	value["count"] = "1"
+	AddItem(db, key, value)
+	time.Sleep(2 * time.Second)
+	ExportToFile(db, "test.bin")
+	db2, err := ImportFromFile[string, map[string]string]("test.bin")
+	if err != nil {
+		t.Fatalf("Error when loading DB: %s", err)
+	}
+	v1, err := GetValueFromKey(db, "user1")
+	if err != nil {
+		t.Fatalf("Error when loading DB: %s", err)
+	}
+	v2, err := GetValueFromKey(db2, "user1")
+	if err != nil {
+		t.Fatalf("Error when loading DB: %s", err)
+	}
+	if v1["count"] != v2["count"] {
+		t.Fatalf("Error when loading DB: %s", err)
+	}
 }
 
 func TestAsync(t *testing.T) {

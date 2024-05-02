@@ -3,7 +3,6 @@ package asyncdb
 import (
 	"fmt"
 	"math/rand"
-	"net/http"
 	"strconv"
 	"sync"
 	"testing"
@@ -35,11 +34,11 @@ func TestImportExport(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Error when loading DB: %s", err)
 	}
-	v1, err := GetValueFromKey(db, "user1")
+	v1, err := GetItem(db, "user1")
 	if err != nil {
 		t.Fatalf("Error when loading DB: %s", err)
 	}
-	v2, err := GetValueFromKey(db2, "user1")
+	v2, err := GetItem(db2, "user1")
 	if err != nil {
 		t.Fatalf("Error when loading DB: %s", err)
 	}
@@ -63,7 +62,7 @@ func TestAsync(t *testing.T) {
 	}
 	wg.Wait()
 	for i := 0; i < 100; i++ {
-		s, err := GetValueFromKey(db, fmt.Sprintf("user%d", i))
+		s, err := GetItem(db, fmt.Sprintf("user%d", i))
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -124,7 +123,7 @@ func TestAsync(t *testing.T) {
 	wg.Wait()
 
 	for i := 0; i < 100; i++ {
-		s, err := GetValueFromKey(db, fmt.Sprintf("user%d", i))
+		s, err := GetItem(db, fmt.Sprintf("user%d", i))
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -153,7 +152,7 @@ func TestAsync(t *testing.T) {
 	}
 	wg.Wait()
 	for i := 0; i < 100; i++ {
-		s, err := GetValueFromKey(db, fmt.Sprintf("user%d", i))
+		s, err := GetItem(db, fmt.Sprintf("user%d", i))
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -187,7 +186,7 @@ func TestSync(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	m, err = GetValueFromKey(db, "user1")
+	m, err = GetItem(db, "user1")
 	if err != nil {
 		t.Fatal(err)
 	}

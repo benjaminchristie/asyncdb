@@ -8,6 +8,10 @@ import (
 	"time"
 )
 
+func Exists[K comparable, V any](db *AsyncDB[K, V], key K) bool {
+	_, exists := db.m.Load(key)
+	return exists
+}
 
 // SELECT
 func SelectFrom[K comparable, V any](db *AsyncDB[K, V], f truthyFunc[V]) []K {
@@ -27,6 +31,7 @@ func SelectFrom[K comparable, V any](db *AsyncDB[K, V], f truthyFunc[V]) []K {
 func Update[K comparable, V any](db *AsyncDB[K, V], key K, value V) error {
 	return ChangeItem(db, key, value)
 }
+
 
 // IMPORTANT: this delete function assumes that whenever
 // a user checks if a key exists in the table,
@@ -56,7 +61,7 @@ func AddItem[K comparable, V any](db *AsyncDB[K, V], key K, value V) error {
 }
 
 
-func GetValueFromKey[K comparable, V any](db *AsyncDB[K, V], key K) (V, error) {
+func GetItem[K comparable, V any](db *AsyncDB[K, V], key K) (V, error) {
 	e, exists := db.m.Load(key)
 	if !exists {
 		return e.(V), &KeyNotExistsError{}

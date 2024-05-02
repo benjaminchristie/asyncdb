@@ -32,6 +32,10 @@ func Update[K comparable, V any](db *AsyncDB[K, V], key K, value V) error {
 	return ChangeItem(db, key, value)
 }
 
+func Range[K comparable, V any](db *AsyncDB[K, V], f func(any, any) bool) {
+	db.m.Range(f)
+}
+
 
 // IMPORTANT: this delete function assumes that whenever
 // a user checks if a key exists in the table,
